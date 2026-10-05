@@ -2,33 +2,22 @@
 Arl TalentMatch:AI-Driven Automated CV Parser & JD Matcher
 =============================================================================
 Branding: Attock Refinery Limited (ARL Official Forest Green & Charcoal Palette)
-Features: Executive Profile Badges, Bulletproof PIN Authentication,
+Features: Netflix-Style Profile Badges, Bulletproof PIN Authentication, Fast OCR,
 Safe Multi-CV Extraction, Exact 13-Column Sequence, ARL Job Hierarchy & Supabase Sync.
 """
 
-import io
 import json
 import os
-import re
 import hashlib
-import random
-import smtplib
-from datetime import datetime
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from email.utils import formataddr
 import pandas as pd
 import streamlit as st
 import streamlit.components.v1 as components
-from PIL import Image, ImageDraw
 
 # ===========================================================================
-# 1. PAGE CONFIGURATION & ARL GREEN HEXAGON FAVICON
+# 1. PAGE CONFIGURATION (INSTANT STRING EMOJI TO PREVENT FREEZE)
 # ===========================================================================
 APP_NAME = "Arl TalentMatch:AI-Driven Automated CV Parser & JD Matcher"
 APP_TAGLINE = "Attock Refinery Limited (ARL) • HR Intelligence & AI Screening Engine"
-GROQ_MODEL = "openai/gpt-oss-120b"
-ACCEPTED_TYPES = ["pdf", "docx", "png", "jpg", "jpeg"]
 
 PROFESSIONAL_STICKERS = {
     "👔": "Executive / HR Lead",
@@ -46,24 +35,16 @@ PROFESSIONAL_STICKERS = {
 }
 
 AVATAR_STORAGE_FILE = "user_avatars.json"
-EXE_DOWNLOAD_URL = "https://github.com/sultan-kk/TalentMatch2.0/releases/download/v1.0/ARL-HireMatrix-Pro_1.0.0_x64_en-US.msi"
-
-def get_arl_favicon():
-    img = Image.new("RGBA", (64, 64), (255, 255, 255, 0))
-    draw = ImageDraw.Draw(img)
-    draw.polygon([(32, 6), (58, 20), (58, 44), (32, 58), (6, 44), (6, 20)], outline=(34, 197, 94), width=5)
-    draw.polygon([(32, 16), (46, 25), (46, 39), (32, 48), (18, 39), (18, 25)], fill=(22, 101, 52))
-    return img
 
 st.set_page_config(
     page_title=f"{APP_NAME} | Corporate Portal",
-    page_icon=get_arl_favicon(),
+    page_icon="🟢",
     layout="wide",
     initial_sidebar_state="collapsed",
 )
 
 # ===========================================================================
-# 2. SUPABASE CONNECTION (SAFE LAZY LOADER)
+# 2. SUPABASE CONNECTION (SAFE LAZY HANDLER)
 # ===========================================================================
 def get_supabase_client():
     try:
@@ -76,32 +57,6 @@ def get_supabase_client():
         pass
     return None
 
-def hash_password(password):
-    return hashlib.sha256(password.encode()).hexdigest()
-
-def send_smtp_email(receiver_email, subject, body_text):
-    try:
-        sender_email = st.secrets.get("SMTP_EMAIL", "")
-        sender_password = st.secrets.get("SMTP_PASSWORD", "")
-        if not sender_email or not sender_password:
-            return False, "SMTP credentials are not configured in Streamlit secrets."
-
-        msg = MIMEMultipart()
-        msg['From'] = formataddr(("ARL Recruitment Notifications", sender_email))
-        msg['To'] = receiver_email
-        msg['Subject'] = subject
-        msg.attach(MIMEText(body_text, 'plain'))
-        
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login(sender_email, sender_password)
-        server.sendmail(sender_email, receiver_email, msg.as_string())
-        server.quit()
-        return True, "Email dispatched successfully!"
-    except Exception as e:
-        return False, f"Failed to send email: {e}"
-
-# ----------------- RELIABLE STICKER STORAGE & PIN AUTH -----------------
 def load_local_avatars():
     if os.path.exists(AVATAR_STORAGE_FILE):
         try:
@@ -532,9 +487,7 @@ if not st.session_state.logged_in:
                             border: 2px solid #4ADE80; display: flex; align-items: center; justify-content: center;
                             box-shadow: 0 0 25px rgba(34, 197, 94, 0.4);
                         ">
-                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#4ADE80" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <polygon points="12 2 22 7.5 22 16.5 12 22 2 16.5 2 7.5"></polygon>
-                            </svg>
+                            <span style="font-size: 32px;">⬡</span>
                         </div>
                     </div>
                     <h1 class="cyber-title">Arl TalentMatch: <span class="cyber-title-pro">AI-Driven Automated CV Parser & JD Matcher</span></h1>
